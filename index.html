@@ -369,18 +369,18 @@
 
 <script>
 const STEPS=[
- {t:"Conectando al modelo activo vía MCP…", tool:"revit.get_active_model", res:"Modelo QA_Demo · 2 niveles · sesión Revit 2024", d:900},
- {t:"Leyendo inventario del modelo…", res:"8 muros · 4 puertas · 3 habitaciones · 3 vistas · 1 plano", d:850},
- {t:"Cargando estándar del estudio (reglas QA)…", res:"4 reglas activas: Mark · nomenclatura · Costo · habitaciones", d:850},
+ {t:"Conectando al modelo activo vía MCP…", tool:"revit.get_active_model", res:"Modelo QA_Demo · 2 niveles · sesión Revit 2024", d:1700},
+ {t:"Leyendo inventario del modelo…", res:"8 muros · 4 puertas · 3 habitaciones · 3 vistas · 1 plano", d:1600},
+ {t:"Cargando estándar del estudio (reglas QA)…", res:"4 reglas activas: Mark · nomenclatura · Costo · habitaciones", d:1600},
  {t:"Check 1 / 4 — parámetro Mark en puertas y muros…", tool:"audit_missing_mark", scan:true, sel:["door1","door2","wallExt"],
-   finds:[{s:"alta",d:"2 puertas sin Mark",id:"ID 45632 · +1"},{s:"media",d:"1 muro exterior sin Mark",id:"ID 47118"}], d:1400},
+   finds:[{s:"alta",d:"2 puertas sin Mark",id:"ID 45632 · +1"},{s:"media",d:"1 muro exterior sin Mark",id:"ID 47118"}], d:2600},
  {t:"Check 2 / 4 — nomenclatura de vistas vs estándar EST-{nivel}-{tipo}…", tool:"audit_view_naming", browser:"badView",
-   finds:[{s:"media",d:"Vista “Planta PB Copy 1” fuera de estándar",id:"view-103"}], d:1200},
+   finds:[{s:"media",d:"Vista “Planta PB Copy 1” fuera de estándar",id:"view-103"}], d:2300},
  {t:"Check 3 / 4 — parámetro Costo en familias…", tool:"audit_cost_param", browser:"badFam",
-   finds:[{s:"baja",d:"Familia de puerta sin parámetro Costo",id:"family-019"}], d:1100},
+   finds:[{s:"baja",d:"Familia de puerta sin parámetro Costo",id:"family-019"}], d:2100},
  {t:"Check 4 / 4 — habitaciones sin nombre…", tool:"audit_rooms", roomFocus:true,
-   finds:[{s:"media",d:"1 habitación sin nombre",id:"room-101"}], d:1100},
- {t:"Consolidando hallazgos y separando correcciones seguras…", res:"5 hallazgos · 1 auto-corregible · 4 requieren criterio humano", d:1000}
+   finds:[{s:"media",d:"1 habitación sin nombre",id:"room-101"}], d:2100},
+ {t:"Consolidando hallazgos y separando correcciones seguras…", res:"5 hallazgos · 1 auto-corregible · 4 requieren criterio humano", d:1900}
 ];
 
 const MROWS=[
@@ -438,7 +438,7 @@ async function runDetection(){
     if(s.roomFocus){/* el agente mira la habitación sin nombre */}
     resolveLine(line,{tool:s.tool,res:s.res});
     await sleep(s.d*0.45);
-    if(s.finds)for(const f of s.finds){addFind(f);await sleep(220);}
+    if(s.finds)for(const f of s.finds){addFind(f);await sleep(650);}
     setPhase("detecting","Fase 1 · Detección autónoma",15+Math.round((i+1)/STEPS.length*45));
   }
   $("lb").classList.remove('on');$("statusText").textContent="Detección completa · 5 hallazgos";
@@ -448,7 +448,7 @@ async function runDetection(){
     <div class="ln"><span>Auto-corregible (seguro)</span><b>1</b></div>
     <div class="ln"><span>Requieren criterio humano</span><b>4</b></div>`;
   feed.appendChild(sum);feed.scrollTop=feed.scrollHeight;
-  await sleep(500);
+  await sleep(1100);
   // gate de aprobación
   setPhase("approval","Fase 2 · Aprobación humana",68);
   explain("Lo único que el agente pide al humano: aprobar las escrituras. Detectar es automático; corregir el modelo requiere tu visto bueno.",
